@@ -14,49 +14,39 @@
     <title>管理员用户管理</title>
 </head>
 <body>
+<%-- TODO --%>
+<%--
+该页面要求管理员必须登录才能访问，下面的c:if标签暂时处理登录认证,
+该功能将在实验四中使用过滤器来简化处理
+--%>
+<c:if test="${empty admin}">
+    <c:redirect
+            url="http://${header.host}${pageContext.request.contextPath}/admin/login.jsp"/>
+</c:if>
+
+<%--头部导航区域--%>
 <div>
     <h1>购书网站后台管理平台</h1>
     <a href="../customer/book/list">前台首页</a>
-    <a href="book/list">图书列表</a>
-    <a href="book/add.jsp">添加图书</a>
+    <a href="book/list">图书列表</a> <a href="book/add.jsp">添加图书</a>
     <a href="customer/list">顾客列表</a>
-    <a href="adminUser/list">管理员列表</a>
-    <a href="adminUser/add.jsp">添加管理员</a>
-</div>
-<div>
-    <%
-        User admin = (User) session.getAttribute("admin");
-        if (admin == null) {
-            //管理员未登录
-            response.sendRedirect(request.getContextPath()+"/admin/login.jsp");
-        } else {
-    %>
+    <a href="adminUser/list">管理员列表</a> <a href="adminUser/add.jsp">添
+    加管理员</a>
+    <a href="order/list">订单列表</a>
     <%-- 管理员已登录 --%>
-    <a href="reset?id=<%=admin.getId() %>">重置密码</a>
+    <a href="reset?id=${admin.id }">重置密码</a>
     <a href="logout">退出</a>
-    <%
-        }
-    %>
 </div>
 <hr>
-
 <h1>修改管理员</h1>
-<%
-        User oldAdminUser = (User) request.getAttribute("admin");
-        if (oldAdminUser == null) {
-            out.print("获取管理员信息失败");
-            return;
-        }
-%>
 
 <form action="adminUser/mod" method="post">
-    管理员id: <input type="text" name="id" readonly value="<%=oldAdminUser.getId() %>">
-    管理员用户名:<input type="text" name="name" value="<%=oldAdminUser.getName() %>"><br>
-    <input type="text" name="status" value="<%=oldAdminUser.getStatus() %>" hidden="hidden">
-    <input type="text" name="createTime" value="<%=oldAdminUser.getCreateTime() %>" hidden="hidden">
-    <input type="text" name="lastAccessTime" value="<%=oldAdminUser.getLastAccessTime() %>" hidden="hidden">
+    管理员id: <input type="text" name="id" readonly value="${adminUser.id}">
+    管理员用户名:<input type="text" name="name" value="${adminUser.name}"><br>
+    <input type="text" name="status" value="${adminUser.status }" hidden="hidden">
+    <input type="text" name="createTime" value="${adminUser.createTime }" hidden="hidden">
+    <input type="text" name="lastAccessTime" value="${adminUser.lastAccessTime }" hidden="hidden">
     <button type="submit">提 交</button>
-    </div>
 </form>
 
 </body>

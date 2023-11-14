@@ -5,11 +5,12 @@
   Time: 20:26
   To change this template use File | Settings | File Templates.
 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="myfn" uri="http://jhc.cn/functions" %>
 <%@ page import="cdu.jhc.model.UserStatus" %>
-<%@ page import="cdu.jhc.model.User" %>
 <%@ page import="cdu.jhc.model.AdminUser" %>
+<%@ page import="cdu.jhc.model.User" %>
 <%@ page import="java.util.List" %>
-<%@ page import="cdu.jhc.util.ParseUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
@@ -18,32 +19,29 @@
     <title>管理员用户管理</title>
 </head>
 <body>
+<%-- TODO --%>
+<%--
+该页面要求管理员必须登录才能访问，下面的c:if标签暂时处理登录认证,
+该功能将在实验四中使用过滤器来简化处理
+--%>
+<c:if test="${empty admin}">
+    <c:redirect
+            url="http://${header.host}${pageContext.request.contextPath}/admin/login.jsp"/>
+</c:if>
+
+<%--头部导航区域--%>
 <div>
     <h1>购书网站后台管理平台</h1>
     <a href="../customer/book/list">前台首页</a>
-    <a href="book/list">图书列表</a>
-    <a href="book/add.jsp">添加图书</a>
+    <a href="book/list">图书列表</a> <a href="book/add.jsp">添加图书</a>
     <a href="customer/list">顾客列表</a>
-    <a href="adminUser/list">管理员列表</a>
-    <a href="adminUser/add.jsp">添加管理员</a>
-</div>
-<div>
-    <%
-        User admin = (User) session.getAttribute("admin");
-        if (admin == null) {
-            //管理员未登录
-            response.sendRedirect(request.getContextPath()+"/admin/login.jsp");
-        } else
-        {
-    %>
+    <a href="adminUser/list">管理员列表</a> <a href="adminUser/add.jsp">添
+    加管理员</a>
+    <a href="order/list">订单列表</a>
     <%-- 管理员已登录 --%>
-    <a href="reset?id=<%=admin.getId() %>">重置密码</a>
+    <a href="reset?id=${admin.id }">重置密码</a>
     <a href="logout">退出</a>
-    <%
-        }
-    %>
 </div>
-
 <hr>
 
 <h2>管理员用户列表</h2>
@@ -57,56 +55,46 @@
 </select>
     <button type="submit">查 询</button>
 </form>
+
 <table>
     <tr>
         <th>id</th>
-        <th>管理员用户名</th>
-        <th>管理员密码</th>
+        <th>管理员用户名</th><th>管理员密码</th>
         <th>创建时间</th>
         <th>最后一次访问时间</th>
         <th>操作</th>
         <th>状态</th>
     </tr>
-        <%
- List<AdminUser> adminUsers = (List<AdminUser>) request.getAttribute("adminUsers");
- for (User adminUser : adminUsers) {
- %>
+    <c:forEach items="${adminUsers }" var="user" varStatus="s">
     <tr>
-        <td><%=adminUser.getId() %>
-        </td>
-        <td><%=adminUser.getName() %>
-        </td>
-        <td><%=adminUser.getPassword() %>
-        </td>
-        <td><%=ParseUtil.formatDateTime(adminUser.getCreateTime()) %>
-        </td>
-        <td><%=ParseUtil.formatDateTime(adminUser.getLastAccessTime()) %>
-        </td>
+        <td>${user.id }</td>
+        <td>${user.name }</td>
+        <td>${myfn:fmtDateTime(user.createTime) } </td>
+        <td>${myfn:fmtDateTime(user.lastAccessTime) } </td>
         <td>
-            <a href="adminUser/reset?id=<%=adminUser.getId() %>">重置密码</a>
-            <a href="adminUser/modPre?id=<%=adminUser.getId() %>">修改</a>
-            <a href="adminUser/del?id=<%=adminUser.getId() %>">删除</a></td>
+            <a href="adminUser/reset?id=${user.id }">重置密码</a>
+            <a href="adminUser/modPre?id=${user.id }">修改</a>
+            <a href="adminUser/del?id=${user.id }">删除</a></td>
         <td>
-            <%=adminUser.getStatus().getName() %>
-            <%=adminUser.getStatus() == UserStatus.NORMAL
-                    ? "<a href='adminUser/freeze?id=" + adminUser.getId() + "'>冻结</a>"
-                    : "<a href='adminUser/active?id=" + adminUser.getId() + "'>解冻</a>" %>
+                ${user.status.name }
+            <c:if test="${user.status==UserStatus.NORMAL }">
+                <a href="adminUser/freeze?id=${user.id }">冻结</a>
+            </c:if>
+            <c:if test="${user.status!=UserStatus.NORMAL }">
+                <a href="adminUser/active?id=${user.id }">解冻</a>
+            </c:if>
         </td>
     </tr>
-    <%
-        }
-    %>
+    </c:forEach>
 </table>
+
 <%-- 分页导航--%>
-<%
-    int p = (int) request.getAttribute("p");
-    int pCount = (int) request.getAttribute("pCount");
-    if (p > 1) {
-        out.print("<a href='adminUser/list?p=" + (p - 1) + "'>上一页</a>");
-    }
-    if (p < pCount) {
-        out.print("<a href='adminUser/list?p=" + (p + 1) + "'>下一页</a>");
-    }
-%>
+<c:if test="${p>1}">
+    <a href="adminUser/list?p=${p-1 }">上一页</a>
+</c:if>
+<c:if test="${p<pCount}">
+    <a href="adminUser/list?p=${p+1 }">下一页</a>
+</c:if>
+
 </body>
 </html>

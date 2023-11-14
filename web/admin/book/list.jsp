@@ -1,6 +1,5 @@
-<%@ page import="cdu.jhc.model.Book" %>
-<%@ page import="java.util.List" %>
-<%@ page import="cdu.jhc.model.User" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="myfn" uri="http://jhc.cn/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
@@ -9,35 +8,36 @@
     <title>图书管理</title>
 </head>
 <body>
+
+<%-- TODO --%>
+<%--
+该页面要求管理员必须登录才能访问，下面的c:if标签暂时处理登录认证,
+该功能将在实验四中使用过滤器来简化处理--%>
+<c:if test="${empty admin}">
+    <c:redirect
+            url="http://${header.host}${pageContext.request.contextPath}/admin/login.jsp"/>
+</c:if>
+
+<%--头部导航区域--%>
 <div>
     <h1>购书网站后台管理平台</h1>
     <a href="../customer/book/list">前台首页</a>
     <a href="book/list">图书列表</a> <a href="book/add.jsp">添加图书</a>
     <a href="customer/list">顾客列表</a>
-    <a href="adminUser/list">管理员列表</a> <a href="adminUser/add.jsp">添加管理员</a>
-</div>
-<div>
-    <%
-        User admin = (User) session.getAttribute("admin");
-        if (admin == null) {
-            //管理员未登录
-            response.sendRedirect(request.getContextPath()+"/admin/login.jsp");
-        } else {
-    %>
+    <a href="adminUser/list">管理员列表</a> <a href="adminUser/add.jsp">添
+    加管理员</a>
+    <a href="order/list">订单列表</a>
     <%-- 管理员已登录 --%>
-    <a href="reset?id=<%=admin.getId() %>">重置密码</a>
+    <a href="reset?id=${admin.id }">重置密码</a>
     <a href="logout">退出</a>
-    <%
-        }
-    %>
 </div>
 <hr>
 
-<h2>图书管理列表</h2>
+<h1>图书列表</h1>
 <form action="book/query" method="post">
-    书名 ：<input type="text" name="title">
-    作者 ：<input type="text" name="author">
-    出版社 ：<input type="text" name="press">
+    书名:<input type="text" name="title">
+    作者:<input type="text" name="author">
+    出版社:<input type="text" name="press">
     <button type="submit">查 询</button>
 </form>
 
@@ -55,50 +55,33 @@
         <th>上架日期</th>
         <th>操作</th>
     </tr>
-    <%
-        List<Book> books = (List<Book>) request.getAttribute("books");
-        for (Book book : books) {
-            out.print("<tr>");
-    %>
-    <td><img width="64px" src="<%=book.getCoverUrl() %>"></td>
-    <td><%=book.getId() %>
-    </td>
-    <td><%=book.getTitle() %>
-    </td>
-    <td><%=book.getAuthor() %>
-    </td>
-    <td><%=book.getPress() %>
-    </td>
-    <td><%=book.getPrice() %>
-    </td>
-    <td><%=book.getSale() %>
-    </td>
-    <td><%=book.getStock() %>
-    </td>
-    <td><%=book.getPublishDate() %>
-    </td>
-    <td><%=book.getMarketDate() %>
-    </td>
-    <td><a href="book/modPre?id=<%=book.getId() %>">修改</a>
-        <a href="book/del?id=<%=book.getId() %>">删除</a>
-    </td>
-    <%
-            out.print("</tr>");
-        }
-    %>
+    <c:forEach items="${books }" var="book" varStatus="s">
+        <tr>
+            <td><img width="64px" src="${book.coverUrl }"></td>
+            <td>${book.id } </td>
+            <td><a href="book/modPre?id=${book.id }">${book.title }
+            </a></td>
+            <td>${book.author } </td>
+            <td>${book.press } </td>
+            <td>${myfn:fmtMoney(book.price) } </td>
+            <td>${book.sale } </td>
+            <td>${book.stock } </td>
+            <td>${myfn:fmtDateShort(book.publishDate) } </td>
+            <td>${myfn:fmtDateShort(book.marketDate) } </td>
+            <td><a href="book/modPre?id=${book.id }">修改</a>
+                <a href="book/del?id=${book.id }">删除</a>
+            </td>
+        </tr>
+    </c:forEach>
 </table>
 
 <%-- 分页导航--%>
-<%
-    int p = (int) request.getAttribute("p");
-    int pCount = (int) request.getAttribute("pCount");
-    if (p > 1) {
-        out.print("<a href='book/list?p=" + (p - 1) + "'>上一页</a>");
-    }
-    if (p < pCount) {
-        out.print("<a href='book/list?p=" + (p + 1) + "'>下一页</a>");
-    }
-%>
+<c:if test="${p>1}">
+    <a href="book/list?p=${p-1 }">上一页</a>
+</c:if>
+<c:if test="${p<pCount}">
+    <a href="book/list?p=${p+1 }">下一页</a>
+</c:if>
 
 </body>
 </html>
