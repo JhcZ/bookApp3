@@ -85,8 +85,7 @@
                 </c:if>
                 <c:if test="${order.status==OrderStatus.PAID }">
                     <form action="order/shipped" method="post">
-                        <input type="text" name="orderId"
-                               value="${order.orderId }" hidden>
+                        <input type="text" name="orderId" value="${order.orderId }" hidden>
                         物流单号:<input type="text" name="expressNumber">
                         <button type="submit">发货</button>
                     </form>

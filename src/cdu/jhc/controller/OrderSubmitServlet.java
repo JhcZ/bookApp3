@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.Date;
 
 //前台：顾客提交订单
-@WebServlet("/customer/order/sumbit")
+@WebServlet("/customer/order/submit")
 public class OrderSubmitServlet extends HttpServlet {
     OrderService orderService = new OrderServiceImpl();
     CartService cartService = new CartServiceImpl();
@@ -68,6 +68,7 @@ public class OrderSubmitServlet extends HttpServlet {
             cartService.clear(customer);
             session.setAttribute("cart",new Cart());
             //转发至订单支付界面
+            req.setAttribute("order",order);
             req.getRequestDispatcher("pay.jsp").forward(req,resp);
         }else{
             //失败，重定向至订单确认界面

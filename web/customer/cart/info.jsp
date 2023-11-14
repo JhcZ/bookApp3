@@ -60,9 +60,9 @@
             <img src="${item.book.coverUrl}" height="50px"
             alt="图书封面"></a>
             </td>
-                <td><a
-                        href="book/info?id=${item.book.id}">${item.book.title}<
-                    /a></td>
+                <td>
+                    <a href="book/info?id=${item.book.id}">${item.book.title}< /a>
+                </td>
                 <td>${item.book.author} </td>
                 <td>${myfn:fmtMoney(item.book.price) } </td>
                 <td>${myfn:fmtMoney(item.book.salePrice) } </td>
@@ -77,11 +77,10 @@
             </tr>
         </table>
     </c:if>
-
-        <div>
-            <a href="book/list">继续购物</a>
-            <a href="cart/clear">清空购物车</a>
-        </div>
+    <div>
+        <a href="book/list">继续购物</a>
+        <a href="cart/clear">清空购物车</a>
+    </div>
 </div>
 </body>
 </html>

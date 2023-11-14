@@ -45,6 +45,6 @@ public class OrderListServlet extends HttpServlet {
         req.setAttribute("p",page);
         req.setAttribute("pCount",pageCount);
         //页面跳转：请求转发至订单列表页面
-        req.getRequestDispatcher("list.jps").forward(req,resp);
+        req.getRequestDispatcher("list.jsp").forward(req,resp);
     }
 }

@@ -22,7 +22,7 @@
     <div>
         <a href="book/list">首页</a>
         <a href="cart/info">购物车</a>
-        <a href="order/list?customerId=${customer.id }">订单历史</a>
+        <a href="order/list?customerId=${customer.id}">订单历史</a>
     </div>
     <div>
         你好，${customer.name }

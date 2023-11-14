@@ -44,30 +44,30 @@
         <a href="cart/info">购物车</a> -
         已下单 - 支付中
     </div>
-        <%-- 支付界面 --%>
-        <div>
-            <h2>已下单，请支付</h2>
-            <p>订单编号：${order.orderId}</p>
-            <p>订单创建时间：${myfn:fmtDateTime(order.createTime)}</p>
-            <p>订单状态：<span>${order.status.name}</span></p>
-            <p>订单金额：${myfn:fmtMoney(order.money)}</p>
-            <address>
-                <strong>收货人：${order.receiverName} </strong><br>
-                收货人电话：${order.receiverTel} <br>
-                收货地址：${order.receiverAddress}
-            </address>
-        </div>
-        <div>
-            <a href="order/pay?orderId=${order.orderId}">
-                <img src="../images/alipay.png" alt="支付宝"
-                     height="100px"></a>
-            <a href="order/pay?orderId=${order.orderId}">
-                <img src="../images/wechatpay.png" alt="微信"
-                     height="100px"></a>
-        </div>
-        <div>
-            <a href="order/cancel?orderId=${order.orderId}">取消订单</a>
-        </div>
+    <%-- 支付界面 --%>
+    <div>
+        <h2>已下单，请支付</h2>
+        <p>订单编号：${order.orderId}</p>
+        <p>订单创建时间：${myfn:fmtDateTime(order.createTime)}</p>
+        <p>订单状态：<span>${order.status.name}</span></p>
+        <p>订单金额：${myfn:fmtMoney(order.money)}</p>
+        <address>
+            <strong>收货人：${order.receiverName} </strong><br>
+            收货人电话：${order.receiverTel} <br>
+            收货地址：${order.receiverAddress}
+        </address>
+    </div>
+    <div>
+        <a href="order/pay?orderId=${order.orderId}">
+            <img src="../images/alipay.png" alt="支付宝" height="100px">
+        </a>
+        <a href="order/pay?orderId=${order.orderId}">
+            <img src="../images/wechatpay.png" alt="微信" height="100px">
+        </a>
+    </div>
+    <div>
+        <a href="order/cancel?orderId=${order.orderId}">取消订单</a>
+    </div>
 </div>
 </body>
 </html>

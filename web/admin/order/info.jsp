@@ -15,76 +15,75 @@
     <base href="http://${header.host}${pageContext.request.contextPath}/admin/">
     <title>购书网站</title>
 </head>
-<body>
-<%-- TODO --%>
-<%--
-该页面要求管理员必须登录才能访问，下面的c:if标签暂时处理登录认证,
-该功能将在实验四中使用过滤器来简化处理
---%>
-<c:if test="${empty admin}">
-    <c:redirect url="http://${header.host}${pageContext.request.contextPath}/admin/login.jsp"/>
-</c:if>
-
-<%--头部导航区域--%>
 <div>
-    <h1>购书网站后台管理平台</h1>
-    <a href="../customer/book/list">前台首页</a>
-    <a href="book/list">图书列表</a> <a href="book/add.jsp">添加图书</a>
-    <a href="customer/list">顾客列表</a>
-    <a href="adminUser/list">管理员列表</a> <a href="adminUser/add.jsp">添
-    加管理员</a>
-    <a href="order/list">订单列表</a>
-    <%-- 管理员已登录 --%>
-    <a href="reset?id=${admin.id }">重置密码</a>
-    <a href="logout">退出</a>
-</div>
-<hr>
+    <%-- TODO --%>
+    <%--
+    该页面要求管理员必须登录才能访问，下面的c:if标签暂时处理登录认证,
+    该功能将在实验四中使用过滤器来简化处理
+    --%>
+    <c:if test="${empty admin}">
+        <c:redirect url="http://${header.host}${pageContext.request.contextPath}/admin/login.jsp"/>
+    </c:if>
 
-<h1>订单详情</h1>
-<table>
-    <tr>
-        <th>图书封面</th>
-        <th>书名</th>
-        <th>原价</th>
-        <th>折扣价</th>
-        <th>购买数量</th>
-    </tr>
-    <c:forEach items="${order.bookItems }" var="item" varStatus="s">
+    <%--头部导航区域--%>
+    <div>
+        <h1>购书网站后台管理平台</h1>
+        <a href="../customer/book/list">前台首页</a>
+        <a href="book/list">图书列表</a> <a href="book/add.jsp">添加图书</a>
+        <a href="customer/list">顾客列表</a>
+        <a href="adminUser/list">管理员列表</a> <a href="adminUser/add.jsp">添
+        加管理员</a>
+        <a href="order/list">订单列表</a>
+        <%-- 管理员已登录 --%>
+        <a href="reset?id=${admin.id }">重置密码</a>
+        <a href="logout">退出</a>
+    </div>
+    <hr>
+
+    <h1>订单详情</h1>
+    <table>
         <tr>
-        <td><a href="../customer/book/info?id=${item.book.id }"><img
-        src="${item.book.coverUrl }" height="50px" alt="图书封
-        面"></a>
-        </td>
-        <td>
-        <a href="../customer/book/info?id=${item.book.id
-            }">${item.book.title }
-        </a>
-        </td>
-            <td>${myfn:fmtMoney(item.book.price) } </td>
-            <td>${myfn:fmtMoney(item.book.salePrice) } </td>
-            <td>${item.num } </td>
+            <th>图书封面</th>
+            <th>书名</th>
+            <th>原价</th>
+            <th>折扣价</th>
+            <th>购买数量</th>
         </tr>
-    </c:forEach>
-</table>
-<div>
-    <p>订单编号：${order.orderId } </p>
-    <p>订单创建时间：${myfn:fmtDateTime(order.createTime) } </p>
-    <p>订单状态：${order.status.name } </p>
-    <c:if test="${order.status==OrderStatus.SHIPPED }">
-        <p>物流单号：${order.expressNumber } </p>
-    </c:if>
-    <c:if test="${order.status==OrderStatus.PAID }">
-        <form action="order/shipped?orderId=${order.orderId }"
-        method="post">
-        物流单号:<input type="text" name="expressNumber">
-        <button type="submit">发货</button>
-        </form>
-    </c:if>
-    <p>状态更新时间：${myfn:fmtDateTime(order.updateTime) } </p>
-    <p>收货人：${order.receiverName } </p>
-    <p>收货人电话：${order.receiverTel } </p>
-    <p>收货地址：${order.receiverAddress } </p>
-    <p>订单金额：${myfn:fmtMoney(order.money) } </p>
+        <c:forEach items="${order.bookItems}" var="item" varStatus="s">
+            <tr>
+            <td>
+                <a href="../customer/book/info?id=${item.book.id}">
+                    <img src="${item.book.coverUrl}" height="50px" alt="图书封面">
+                </a>
+            </td>
+            <td>
+            <a href="../customer/book/info?id=${item.book.id}">${item.book.title }</a>
+            </td>
+                <td>${myfn:fmtMoney(item.book.price) } </td>
+                <td>${myfn:fmtMoney(item.book.salePrice) } </td>
+                <td>${item.num } </td>
+            </tr>
+        </c:forEach>
+    </table>
+    <div>
+        <p>订单编号：${order.orderId } </p>
+        <p>订单创建时间：${myfn:fmtDateTime(order.createTime) } </p>
+        <p>订单状态：${order.status.name } </p>
+        <c:if test="${order.status==OrderStatus.SHIPPED }">
+            <p>物流单号：${order.expressNumber } </p>
+        </c:if>
+        <c:if test="${order.status==OrderStatus.PAID }">
+            <form action="order/shipped?orderId=${order.orderId}" method="post">
+            物流单号:<input type="text" name="expressNumber">
+            <button type="submit">发货</button>
+            </form>
+        </c:if>
+        <p>状态更新时间：${myfn:fmtDateTime(order.updateTime) } </p>
+        <p>收货人：${order.receiverName } </p>
+        <p>收货人电话：${order.receiverTel } </p>
+        <p>收货地址：${order.receiverAddress } </p>
+        <p>订单金额：${myfn:fmtMoney(order.money) } </p>
+    </div>
 </div>
 </body>
 </html>

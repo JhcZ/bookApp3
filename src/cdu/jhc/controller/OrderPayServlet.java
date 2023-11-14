@@ -22,6 +22,6 @@ public class OrderPayServlet extends HttpServlet {
         //调用服务层方法模拟订单支付
         orderService.pay(orderId);
         //支付成功或失败，都重定向到该订单的详情页面
-        resp.sendRedirect("info?orderId=?" + orderId);
+        resp.sendRedirect("info?orderId=" + orderId);
     }
 }

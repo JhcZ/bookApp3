@@ -1,5 +1,8 @@
 package cdu.jhc.controller;
 
+import cdu.jhc.model.Cart;
+import cdu.jhc.service.CartService;
+import cdu.jhc.service.impl.CartServiceImpl;
 import cdu.jhc.model.Customer;
 import cdu.jhc.model.User;
 import cdu.jhc.service.CustomerService;
@@ -10,13 +13,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 
 // 前台：顾客登录
 @WebServlet(urlPatterns = {"/customer/login"})
 public class CustomerLoginServlet extends HttpServlet{
     CustomerService customerService = new CustomerServiceImpl();
+    CartService cartService = new CartServiceImpl();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -73,6 +76,12 @@ public class CustomerLoginServlet extends HttpServlet{
         customerService.modAccessTime(customer);
         // 在会话范围内保存登录用户信息
         session.setAttribute("customer", customer);
+
+        //合并用户登录前的购物车信息
+        Cart cart = (Cart) session.getAttribute("cart");
+        cart = cartService.merge(cart,customer);
+        session.setAttribute("cart",cart);
+
         // 顾客用户登录成功，页面跳转至图书列表页面
         resp.sendRedirect(req.getContextPath() + "/customer/book/list");
     }

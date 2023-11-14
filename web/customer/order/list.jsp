@@ -20,8 +20,7 @@
 <%-- 订单历史只能登录顾客查看，如未登录则跳转到登录页面 --%>
 <%-- 此处功能将在实验四中使用过滤器来处理 --%>
 <c:if test="${empty customer}">
-    <c:redirect
-            url="http://${header.host}${pageContext.request.contextPath}/customer/login.jsp"/>
+    <c:redirect url="http://${header.host}${pageContext.request.contextPath}/customer/login.jsp"/>
 </c:if>
 
 <%--前台 头部导航区域--%>
@@ -57,38 +56,30 @@
         </tr>
         <c:forEach items="${orders}" var="order" varStatus="s">
             <tr>
-            <td>${order.orderId }
-            </td>
-            <td>${myfn:fmtDateTime(order.createTime) }
-            </td>
-            <td>${myfn:fmtMoney(order.money) }
-            </td>
-            <td>${order.receiverName }
-            </td>
-            <td><a href="order/info?orderId=${order.orderId }">订单详情
-            </a></td>
-            <td>
-            <span class="text-danger">${order.status.name }</span>
-            <c:if test="${order.status==OrderStatus.UNPAID}">
-                <a href="order/pay?orderId=${order.orderId}">付款
-                </a>
-                <a href="order/cancel?orderId=${order.orderId}">取
-                    消订单</a>
-            </c:if>
-            <c:if test="${order.status==OrderStatus.PAID }">
-                <a href="order/cancel?orderId=${order.orderId}">取
-                    消订单</a>
-            </c:if>
-            <c:if test="${order.status==OrderStatus.SHIPPED}">
-                物流单号：${order.expressNumber }
-                <a href="order/finish?orderId=${order.orderId}">确
-                    认收货</a>
-            </c:if>
-                <c:if test="${order.status==OrderStatus.CANCEL}">
-                    <a href="order/del?orderId=${order.orderId}">删除订
-                        单</a>
+                <td>${order.orderId }</td>
+                <td>${myfn:fmtDateTime(order.createTime) }</td>
+                <td>${myfn:fmtMoney(order.money) }</td>
+                <td>${order.receiverName }</td>
+                <td>
+                    <a href="order/info?orderId=${order.orderId }">订单详情</a>
+                </td>
+                <td>
+                <span class="text-danger">${order.status.name }</span>
+                <c:if test="${order.status==OrderStatus.UNPAID}">
+                    <a href="order/pay?orderId=${order.orderId}">付款</a>
+                    <a href="order/cancel?orderId=${order.orderId}">取消订单</a>
                 </c:if>
-            </td>
+                <c:if test="${order.status==OrderStatus.PAID }">
+                    <a href="order/cancel?orderId=${order.orderId}">取消订单</a>
+                </c:if>
+                <c:if test="${order.status==OrderStatus.SHIPPED}">
+                    物流单号：${order.expressNumber }
+                    <a href="order/finish?orderId=${order.orderId}">确认收货</a>
+                </c:if>
+                    <c:if test="${order.status==OrderStatus.CANCEL}">
+                        <a href="order/del?orderId=${order.orderId}">删除订单</a>
+                    </c:if>
+                </td>
             </tr>
         </c:forEach>
     </table>

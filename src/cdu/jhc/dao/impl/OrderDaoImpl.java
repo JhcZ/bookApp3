@@ -21,7 +21,7 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
     @Override
     public Order findByOrderId(String orderId) {
         Order order = null;
-        String sql = "SELECT * FROM cart_table WHERE orderId=?";
+        String sql = "SELECT * FROM order_table WHERE orderId=?";
         System.out.println("DAO查询订单：orderId=" + orderId + "," + sql);
 
         try{
@@ -91,14 +91,13 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
     public List<Order> query(Order condition) {
         String sql = "SELECT * FROM order_table";
         if(condition != null){
-            sql += "WHERE 1=1";
+            sql += " WHERE 1=1";
             if(condition.getId() != 0)
                 sql += " AND id='" + condition.getId() + "'";
             if(condition.getOrderId() != null)
                 sql += " AND orderId='" + condition.getOrderId() + "'";
             if(condition.getCustomerId() != null)
                 sql += " AND customerId='" + condition.getCustomerId() + "'";
-
             if(condition.getStatus() != null && condition.getStatus() != OrderStatus.ALL)
                 sql += " AND status='" + condition.getStatus().getName() + "'";
         }
@@ -135,7 +134,7 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
     public List<Order> query(Order condition, int start, int num) {
         String sql = "SELECT * FROM order_table";
         if(condition != null){
-            sql += "WHERE 1=1";
+            sql += " WHERE 1=1";
             if(condition.getId() != 0)
                 sql += " AND id='" + condition.getId() + "'";
             if(condition.getOrderId() != null)
@@ -181,7 +180,7 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
         int rows = 0;
         String sql = "INSERT INTO order_table(orderId,customerId,books,money," +
                 "status,createTime,receiverName,receiverTel,receiverAddress)" +
-                "VALUES(?,?,?,?,?,?,?,?,?)";
+                " VALUES (?,?,?,?,?,?,?,?,?) ";
         try{
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, order.getOrderId());
@@ -193,7 +192,7 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
             pstmt.setString(7, order.getReceiverName());
             pstmt.setString(8, order.getReceiverTel());
             pstmt.setString(9, order.getReceiverAddress());
-            rs = pstmt.executeQuery();
+            rows = pstmt.executeUpdate();
         }catch(SQLException e){
             System.out.println("DAO添加订单出错：" + sql + "," + e.getMessage());
         }
@@ -211,7 +210,7 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
             pstmt.setString(2, order.getExpressNumber());
             pstmt.setLong(3, new Date().getTime());
             pstmt.setString(4, order.getOrderId());
-            rs = pstmt.executeQuery();
+            rows = pstmt.executeUpdate();
         }catch(SQLException e){
             System.out.println("DAO修改订单出错：" + sql + "," + e.getMessage());
         }
@@ -221,12 +220,12 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
     @Override
     public int delete(String orderId) {
         int rows = 0;
-        String sql = "DELETE FROM order-table WHERE orderId=?";
+        String sql = "DELETE FROM order_table WHERE orderId=?";
 
         try{
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1,orderId);
-            rs = pstmt.executeQuery();
+            rows = pstmt.executeUpdate();
         }catch(SQLException e){
             System.out.println("DAO删除订单出错：" + sql + "," + e.getMessage());
         }
@@ -241,7 +240,7 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
         try{
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1,id);
-            rs = pstmt.executeQuery();
+            rows = pstmt.executeUpdate();
         }catch(SQLException e){
             System.out.println("DAO删除订单出错：" + sql + "," + e.getMessage());
         }
@@ -258,7 +257,7 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
         int num = 0;
         String sql = "SELECT count(*) FROM order_table";
         if (condition != null) {
-            sql += "WHERE 1=1";
+            sql += " WHERE 1=1";
             if (condition.getOrderId() != null && !condition.getOrderId().isEmpty())
                 sql += " AND oderId='" + condition.getOrderId() + "'";
             if (condition.getCustomerId() != null && !condition.getCustomerId().isEmpty())

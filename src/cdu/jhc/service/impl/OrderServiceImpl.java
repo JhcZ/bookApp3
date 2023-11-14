@@ -58,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
                 for(BookItem item : order.getBookItems()){
                     int num = item.getNum();
                     Book book = item.getBook();
-                    book.setStock(book.getStock());
+                    book.setStock(book.getStock() + num);
                     bookService.mod(book);
                 }
                 return true;
@@ -86,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
     public boolean pay(String orderId) {
         Order condition = new Order();
         condition.setOrderId(orderId);
-        condition.setStatus(OrderStatus.UNPAID);
+        condition.setStatus(OrderStatus.PAID);
         return orderDao.update(condition) == 1;
     }
 

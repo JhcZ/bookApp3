@@ -27,7 +27,7 @@
 <div>
     <a href="book/list">首页</a>
     <a href="cart/info">购物车</a>
-    <a href="order/list?customerId=${customer.id }">订单历史</a>
+    <a href="order/list?customerId=${customer.id}">订单历史</a>
 </div>
 <div>
     你好，${customer.name }
@@ -55,11 +55,14 @@
     </tr>
     <c:forEach items="${cart.bookItems }" var="item" varStatus="s">
         <tr>
-            <td><a href="book/info?id=${item.book.id}"><img
-            src="${item.book.coverUrl}" height="50px" alt="图书封面">
-            </a></td>
-            <td><a href="book/info?id=${item.book.id}">${item.book.title}
-            </a></td>
+            <td>
+                <a href="book/info?id=${item.book.id}">
+                    <img src="${item.book.coverUrl}" height="50px" alt="图书封面">
+                </a>
+            </td>
+            <td>
+                <a href="book/info?id=${item.book.id}">${item.book.title}</a>
+            </td>
             <td>${myfn:fmtMoney(item.book.price)} </td>
             <td>${myfn:fmtMoney(item.book.salePrice)} </td>
             <td>${item.num} </td>

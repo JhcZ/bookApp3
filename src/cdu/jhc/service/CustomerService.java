@@ -9,7 +9,7 @@ import java.util.List;
 public interface CustomerService {
     //查找指定id的顾客
     Customer get(int id);
-    //查找登录用户
+    //获取登录用户
     Customer check(User user);
     //分页模糊查找顾客列表
     List<Customer> get(Customer condition, int page, int pageSize);
